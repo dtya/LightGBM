@@ -69,7 +69,7 @@ Some important parameters:
 
 -  ``application``, default=\ ``regression``, type=enum,
    options=\ ``regression``, ``regression_l1``, ``huber``, ``fair``, ``poisson``, ``quantile``, ``mape``,
-   ``binary``, ``multiclass``, ``multiclassova``, ``xentropy``, ``xentlambda``, ``lambdarank``, ``gammma``,
+   ``binary``, ``multiclass``, ``multiclassova``, ``xentropy``, ``xentlambda``, ``lambdarank``, ``gammma``, ``tweedie``,
    alias=\ ``objective``, ``app``
 
    -  regression application
@@ -88,7 +88,9 @@ Some important parameters:
 
       -  ``mape``, `MAPE loss`_, alias=\ ``mean_absolute_percentage_error``
 
-      -  ``gamma``, `Gamma Regression`_
+      -  ``gamma``, gamma regression with log-link. It might be useful, e.g., for modeling insurance claims severity, or for any target that might be `gamma-distributed`_
+
+      -  ``tweedie``, tweedie regression with log-link. It might be useful, e.g., for modeling total loss in insurance, or for any target that might be `tweedie-distributed`_.
 
    -  ``binary``, binary `log loss`_ classification application
 
@@ -250,5 +252,6 @@ Examples
 
 .. _hyper-threading: https://en.wikipedia.org/wiki/Hyper-threading
 
-.. _Gamma Regression: https://en.wikipedia.org/wiki/Gamma_distribution
+.. _gamma-distributed: https://en.wikipedia.org/wiki/Gamma_distribution#Applications
 
+.. _tweedie-distributed: https://en.wikipedia.org/wiki/Tweedie_distribution#Applications

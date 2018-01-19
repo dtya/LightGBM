@@ -279,6 +279,22 @@ public:
   }
 };
 
+class TweedieMetric : public RegressionMetric<TweedieMetric> {
+public:
+  explicit TweedieMetric(const MetricConfig& config) :RegressionMetric<TweedieMetric>(config) {
+  }
+
+  inline static double LossOnPoint(label_t label, double score, const MetricConfig& config) {
+    const double rho = config.tweedie_variance_power;
+    const double a = label * std::exp((1 - rho) * std::log(score)) / (1 - rho);
+    const double b = std::exp((2 - rho) * std::log(score)) / (2 - rho);
+    return -a + b;
+  }
+  inline static const char* Name() {
+    return "tweedie";
+  }
+};
+
 
 }  // namespace LightGBM
 #endif   // LightGBM_METRIC_REGRESSION_METRIC_HPP_

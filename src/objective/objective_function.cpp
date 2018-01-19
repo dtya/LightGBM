@@ -37,6 +37,8 @@ ObjectiveFunction* ObjectiveFunction::CreateObjectiveFunction(const std::string&
     return new RegressionMAPELOSS(config);
   } else if (type == std::string("gamma")) {
     return new RegressionGammaLoss(config);
+  } else if (type == std::string("tweedie")) {
+    return new RegressionTweedieLoss(config);
   }
   return nullptr;
 }
@@ -70,6 +72,8 @@ ObjectiveFunction* ObjectiveFunction::CreateObjectiveFunction(const std::string&
     return new CrossEntropyLambda(strs);
   } else if (type == std::string("gamma")) {
     return new RegressionGammaLoss(strs);
+  } else if (type == std::string("tweedie")) {
+    return new RegressionTweedieLoss(strs);
   }
   return nullptr;
 }

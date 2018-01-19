@@ -55,7 +55,7 @@ Core Parameters
 
 -  ``application``, default=\ ``regression``, type=enum,
    options=\ ``regression``, ``regression_l1``, ``huber``, ``fair``, ``poisson``, ``quantile``, ``mape``,
-   ``binary``, ``multiclass``, ``multiclassova``, ``xentropy``, ``xentlambda``, ``lambdarank``, ``gammma``,
+   ``binary``, ``multiclass``, ``multiclassova``, ``xentropy``, ``xentlambda``, ``lambdarank``, ``gammma``, ``tweedie``,
    alias=\ ``objective``, ``app``
 
    -  regression application
@@ -74,7 +74,9 @@ Core Parameters
 
       -  ``mape``, `MAPE loss`_, alias=\ ``mean_absolute_percentage_error``
 
-      -  ``gamma``, `Gamma Regression`_
+      -  ``gamma``, gamma regression with log-link. It might be useful, e.g., for modeling insurance claims severity, or for any target that might be `gamma-distributed`_
+
+      -  ``tweedie``, tweedie regression with log-link. It might be useful, e.g., for modeling total loss in insurance, or for any target that might be `tweedie-distributed`_.
 
    -  ``binary``, binary `log loss`_ classification application
 
@@ -559,6 +561,13 @@ Objective Parameters
 
    -  will fit ``sqrt(label)`` instead and prediction result will be also automatically converted to ``pow2(prediction)``
 
+-  ``tweedie_variance_power``, default=\ ``1.5``, type=\ ``double``, range=\ ``[1,2)``
+   - parameter that controls the variance of the tweedie distribution
+   
+   - set closer to 2 to shift towards a gamma distribution
+   
+   - set closer to 1 to shift towards a poisson distribution
+
 Metric Parameters
 -----------------
 
@@ -603,6 +612,8 @@ Metric Parameters
    -  ``gamma``, negative log-likelihood for gamma regression
 
    -  ``gamma_deviance``, residual deviance for gamma regression, alias=\ ``gamma-deviance``
+
+   -  ``tweedie``, negative log-likelihood for tweedie regression
 
    -  support multi metrics, separated by ``,``
 
@@ -776,4 +787,6 @@ You can specific query/group id in data file now. Please refer to parameter ``gr
 
 .. _Kullback-Leibler divergence: https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
 
-.. _Gamma Regression: https://en.wikipedia.org/wiki/Gamma_distribution
+.. _gamma-distributed: https://en.wikipedia.org/wiki/Gamma_distribution#Applications
+
+.. _tweedie-distributed: https://en.wikipedia.org/wiki/Tweedie_distribution#Applications
