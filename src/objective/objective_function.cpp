@@ -35,6 +35,8 @@ ObjectiveFunction* ObjectiveFunction::CreateObjectiveFunction(const std::string&
     return new CrossEntropyLambda(config);
   } else if (type == std::string("mean_absolute_percentage_error") || type == std::string("mape")) {
     return new RegressionMAPELOSS(config);
+  } else if (type == std::string("gamma")) {
+    return new RegressionGammaLoss(config);
   }
   return nullptr;
 }
@@ -66,6 +68,8 @@ ObjectiveFunction* ObjectiveFunction::CreateObjectiveFunction(const std::string&
     return new CrossEntropy(strs);
   } else if (type == std::string("xentlambda") || type == std::string("cross_entropy_lambda")) {
     return new CrossEntropyLambda(strs);
+  } else if (type == std::string("gamma")) {
+    return new RegressionGammaLoss(strs);
   }
   return nullptr;
 }

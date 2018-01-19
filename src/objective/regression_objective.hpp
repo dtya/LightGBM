@@ -636,6 +636,78 @@ private:
 
 };
 
+
+
+/*!
+* \brief Objective function for Gamma regression
+*/
+class RegressionGammaLoss : public RegressionL2loss {
+public:
+  explicit RegressionGammaLoss(const ObjectiveConfig& config) : RegressionL2loss(config) {
+    if (sqrt_) {
+      Log::Warning("cannot use sqrt transform in Gamma Regression, will auto disable it.");
+      sqrt_ = false;
+    }
+  }
+
+  explicit RegressionGammaLoss(const std::vector<std::string>& strs) : RegressionL2loss(strs) {
+
+  }
+
+  ~RegressionGammaLoss() {}
+
+  void Init(const Metadata& metadata, data_size_t num_data) override {
+    if (sqrt_) {
+      Log::Warning("cannot use sqrt transform in Gamma Regression, will auto disable it.");
+      sqrt_ = false;
+    }
+    RegressionL2loss::Init(metadata, num_data);
+    // Safety check of labels
+    label_t miny;
+    double sumy;
+    Common::ObtainMinMaxSum(label_, num_data_, &miny, (label_t*)nullptr, &sumy);
+    if (miny < 0.0f) {
+      Log::Fatal("[%s]: at least one target label is negative.", GetName());
+    }
+    if (sumy == 0.0f) {
+      Log::Fatal("[%s]: sum of labels is zero.", GetName());
+    }
+  }
+
+  void GetGradients(const double* score, score_t* gradients,
+                    score_t* hessians) const override {
+    if (weights_ == nullptr) {
+      #pragma omp parallel for schedule(static)
+      for (data_size_t i = 0; i < num_data_; ++i) {
+        gradients[i] = static_cast<score_t>(1.0 - label_[i] / std::exp(score[i]));
+        hessians[i] = static_cast<score_t>(label_[i] / std::exp(score[i]));
+      }
+    } else {
+      #pragma omp parallel for schedule(static)
+      for (data_size_t i = 0; i < num_data_; ++i) {
+        gradients[i] = static_cast<score_t>(1.0 - label_[i] / std::exp(score[i]) * weights_[i]);
+        hessians[i] = static_cast<score_t>(label_[i] / std::exp(score[i]) * weights_[i]);
+      }
+    }
+  }
+
+  void ConvertOutput(const double* input, double* output) const override {
+    output[0] = std::exp(input[0]);
+  }
+
+  const char* GetName() const override {
+    return "gamma";
+  }
+
+  double BoostFromScore() const override {
+    return std::log(RegressionL2loss::BoostFromScore());
+  }
+
+  bool IsConstantHessian() const override {
+    return false;
+  }
+};
+
 #undef PercentileFun
 #undef WeightedPercentileFun
 
