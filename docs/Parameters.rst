@@ -55,7 +55,7 @@ Core Parameters
 
 -  ``application``, default=\ ``regression``, type=enum,
    options=\ ``regression``, ``regression_l1``, ``huber``, ``fair``, ``poisson``, ``quantile``, ``mape``,
-   ``binary``, ``multiclass``, ``multiclassova``, ``xentropy``, ``xentlambda``, ``lambdarank``,
+   ``binary``, ``multiclass``, ``multiclassova``, ``xentropy``, ``xentlambda``, ``lambdarank``, ``gammma``,
    alias=\ ``objective``, ``app``
 
    -  regression application
@@ -73,6 +73,8 @@ Core Parameters
       -  ``quantile``, `Quantile regression`_
 
       -  ``mape``, `MAPE loss`_, alias=\ ``mean_absolute_percentage_error``
+
+      -  ``gamma``, `Gamma Regression`_
 
    -  ``binary``, binary `log loss`_ classification application
 
@@ -560,7 +562,7 @@ Objective Parameters
 Metric Parameters
 -----------------
 
--  ``metric``, default={``l2`` for regression, ``binary_logloss`` for binary classification, ``ndcg`` for lambdarank}, type=multi-enum
+-  ``metric``, default=``None``, type=multi-enum
 
    -  ``l1``, absolute loss, alias=\ ``mean_absolute_error``, ``mae``
 
@@ -576,7 +578,7 @@ Metric Parameters
 
    -  ``fair``, `Fair loss`_
 
-   -  ``poisson``, `Poisson regression`_
+   -  ``poisson``, negative log-likelihood for Poisson regression
 
    -  ``ndcg``, `NDCG`_
 
@@ -597,6 +599,10 @@ Metric Parameters
    -  ``xentlambda``, "intensity-weighted" cross-entropy, alias=\ ``cross_entropy_lambda``
 
    -  ``kldiv``, `Kullback-Leibler divergence`_, alias=\ ``kullback_leibler``
+
+   -  ``gamma``, negative log-likelihood for gamma regression
+
+   -  ``gamma_deviance``, residual deviance for gamma regression, alias=\ ``gamma-deviance``
 
    -  support multi metrics, separated by ``,``
 
@@ -769,3 +775,5 @@ You can specific query/group id in data file now. Please refer to parameter ``gr
 .. _One-vs-All: https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest
 
 .. _Kullback-Leibler divergence: https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
+
+.. _Gamma Regression: https://en.wikipedia.org/wiki/Gamma_distribution
